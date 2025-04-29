@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход | ZОЖесть</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #2d3436;
+        }
+        header {
+            background-color: #000000;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+        }
+        .nav-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .logo svg {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            fill: #D22283;
+            transition: fill 0.3s;
+        }
+        .logo:hover svg {
+            fill: #E1FF00;
+        }
+        .logo-text {
+            font-weight: 700;
+            color: white;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        .logo:hover .logo-text {
+            color: #E1FF00;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 80px auto;
+            padding: 40px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            color: #000000;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #D22283;
+            box-shadow: 0 0 0 2px rgba(210, 34, 131, 0.2);
+        }
+        .btn {
+            width: 100%;
+            background-color: #D22283;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #b01c6f;
+        }
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .register-link a {
+            color: #D22283;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        .agreement {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #636e72;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="nav-container">
+        <a href="index.html" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81
+                 4.5 2.09C13.09 3.81 14.76 3 16.5 3
+                 19.58 3 22 5.42 22 8.5c0 3.78-3.4
+                 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <span class="logo-text">ZОЖесть</span>
+        </a>
+    </div>
+</header>
+
+<div class="login-container">
+    <h2>Вход в личный кабинет</h2>
+    <form>
+        <div class="form-group">
+            <label for="login">Логин или e-mail</label>
+            <input type="text" id="login" name="login" placeholder="Логин">
+        </div>
+        <div class="form-group">
+            <label for="password">Пароль</label>
+            <input type="password" id="password" name="password" placeholder="Пароль">
+        </div>
+        <button type="submit" class="btn">Войти</button>
+        <div class="register-link">
+            Нет аккаунта? <a href="register.html">Зарегистрироваться</a>
+        </div>
+        <div class="agreement">
+            Соглашаюсь с условиями передачи данных
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
