@@ -1,0 +1,255 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding-top: 0;
+    color: #2d3436;
+    line-height: 1.6;
+    background-color: #f5f5f5;
+}
+
+header {
+    background-color: #000000;
+    position: fixed;
+    width: 100%;
+    padding: 15px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.nav-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.logo {
+    margin-right: 40px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.logo svg {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    transition: fill 0.3s ease, transform 0.3s ease;
+}
+
+.logo:hover svg {
+    fill: #E1FF00;
+    transform: scale(1.1);
+}
+
+.logo-text {
+    font-weight: 700;
+    color: white;
+    font-size: 18px;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.logo:hover .logo-text {
+    color: #E1FF00;
+    text-shadow: 0 0 5px rgba(225, 255, 0, 0.5);
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
+}
+
+.nav-links a:hover {
+    color: #D22283;
+    background-color: rgba(210, 34, 131, 0.1);
+    transform: translateY(-2px);
+}
+
+.nav-links a:active {
+    transform: translateY(0);
+}
+
+.profile-icon {
+    margin-left: auto;
+}
+
+.profile-icon svg {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: fill 0.3s ease, transform 0.3s ease;
+}
+
+.profile-icon:hover svg {
+    fill: #D22283;
+    transform: scale(1.1);
+}
+
+.calculator-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 72px 15px 0;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.calculator-container h1 {
+    color: #D22283;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.calculator-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    font-weight: 600;
+    color: #555;
+}
+
+.input-group input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #D22283;
+    outline: none;
+}
+
+button {
+    background-color: #D22283;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #E1FF00;
+    color: #000;
+}
+
+.result {
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    margin-top: 10px;
+}
+
+.interpretation {
+    font-size: 16px;
+    text-align: center;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    margin-top: 10px;
+}
+
+.info-section {
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.info-section h2 {
+    color: #D22283;
+    margin-top: 0;
+}
+
+.info-section ul {
+    padding-left: 20px;
+}
+
+.info-section li {
+    margin-bottom: 8px;
+}
+
+.input-row {
+    display: flex;
+    gap: 20px;
+}
+
+.input-row .input-group {
+    flex: 1;
+}
+
+select {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+    background-color: white;
+    transition: border-color 0.3s;
+}
+
+select:focus {
+    border-color: #D22283;
+    outline: none;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-label {
+    font-weight: 600;
+    color: #555;
+}
+
+.result-value {
+    font-weight: 700;
+    color: #D22283;
+}
