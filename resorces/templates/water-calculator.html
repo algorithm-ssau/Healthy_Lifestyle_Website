@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор нормы воды | ZОЖесть</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding-top: 0;
+            color: #2d3436;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #000000;
+            position: fixed;
+            width: 100%;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            margin-right: 40px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logo svg {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            transition: fill 0.3s ease, transform 0.3s ease;
+        }
+
+        .logo:hover svg {
+            fill: #E1FF00;
+            transform: scale(1.1);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            color: white;
+            font-size: 18px;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .logo:hover .logo-text {
+            color: #E1FF00;
+            text-shadow: 0 0 5px rgba(225, 255, 0, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #D22283;
+            background-color: rgba(210, 34, 131, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a:active {
+            transform: translateY(0);
+        }
+
+        .profile-icon {
+            margin-left: auto;
+        }
+
+        .profile-icon svg {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            transition: fill 0.3s ease, transform 0.3s ease;
+        }
+
+        .profile-icon:hover svg {
+            fill: #D22283;
+            transform: scale(1.1);
+        }
+
+        .calculator-container {
+            max-width: 800px;
+            margin: 0 auto 30px;
+            padding: 72px 15px 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator-container h1 {
+            color: #D22283;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23636e72' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+        }
+
+        .calculator-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .input-group input,
+        .input-group select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-error {
+            border-color: #e74c3c !important;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-group input:focus,
+        .input-group select:Focus {
+            border-color: #D22283;
+            outline: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .button-group button {
+            flex: 1;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #D22283;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #b31c6b;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+            max-width: 300px;
+        }
+
+        .notification.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .notification.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: #D22283;
+        }
+
+        .info-section {
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .info-section h2 {
+            color: #D22283;
+            margin-top: 0;
+        }
+
+        .info-section ul {
+            padding-left: 20px;
+        }
+
+        .info-section li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="nav-container">
+        <div class="nav-content">
+            <a th:href="@{/}" class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#D22283">
+                    <path
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+                <span class="logo-text">ZОЖесть</span>
+            </a>
+            <nav class="nav-links">
+                <a th:href="@{/calculators}">Калькуляторы</a>
+                <a th:href="@{/train}">Тренировки</a>
+                <a th:href="@{/generator}">Генератор</a>
+            </nav>
+            <div class="profile-icon">
+                <a class="profile-link" th:href="@{/profile}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+                        <path
+                                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                                transform="scale(1.5)" transform-origin="12 12" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="calculator-container">
+    <h1>Калькулятор нормы воды</h1>
+    <div class="calculator-form">
+        <div id="notification" class="notification"></div>
+
+        <div class="input-row">
+            <div class="input-group">
+                <label for="activity">Уровень физической активности:</label>
+                <select id="activity">
+                    <option value="30">Низкий (сидячий образ жизни)</option>
+                    <option value="35" selected>Умеренный (легкие тренировки 1-3 раза в неделю)</option>
+                    <option value="40">Высокий (интенсивные тренировки 4-5 раз в неделю)</option>
+                    <option value="45">Очень высокий (профессиональные спортсмены)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-row">
+            <div class="input-group">
+                <label for="weight">Вес (кг):</label>
+                <input type="number" id="weight" placeholder="Введите вес">
+                <div id="weightError" class="error-message"></div>
+            </div>
+            <div class="input-group">
+                <label for="climate">Климат:</label>
+                <input list="climateOptions" id="climate" name="climate" placeholder="Выберите климат"
+                       autocomplete="off">
+                <datalist id="climateOptions">
+                    <option value="Умеренный" data-value="1">
+                    <option value="Жаркий" data-value="1.2">
+                    <option value="Холодный" data-value="0.9">
+                </datalist>
+                <div id="climateError" class="error-message"></div>
+            </div>
+        </div>
+
+        <div class="button-group" th:if="${hasProfileData}">
+            <button id="calculate">Рассчитать норму воды</button>
+            <button id="loadFromProfile">Загрузить данные из профиля</button>
+        </div>
+        <div class="button-group" th:unless="${hasProfileData}">
+            <button id="calculate">Рассчитать норму воды</button>
+        </div>
+
+        <div id="result" class="result">
+            <div class="result-item">
+                <span class="result-label">Базовая норма воды:</span>
+                <span id="baseWater" class="result-value">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">С учетом активности:</span>
+                <span id="activityWater" class="result-value">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Рекомендуемая норма воды:</span>
+                <span id="recommendedWater" class="result-value">-</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h2>Как рассчитывается норма воды?</h2>
+        <p>Базовая формула расчета: 35 мл воды на 1 кг веса тела. Этот показатель корректируется в зависимости от
+            уровня физической активности и климатических условий.</p>
+
+        <h2>Почему важно пить воду?</h2>
+        <ul>
+            <li>Поддерживает нормальную работу всех органов</li>
+            <li>Участвует в процессах терморегуляции</li>
+            <li>Способствует выведению токсинов</li>
+            <li>Улучшает состояние кожи</li>
+            <li>Повышает уровень энергии</li>
+        </ul>
+
+        <h2>Советы по потреблению воды:</h2>
+        <ul>
+            <li>Пейте воду равномерно в течение дня</li>
+            <li>Начинайте день со стакана воды</li>
+            <li>Увеличивайте потребление воды при физических нагрузках</li>
+            <li>Ограничьте потребление кофеина и алкоголя</li>
+        </ul>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Ключи для localStorage
+        const STORAGE_KEYS = {
+            WEIGHT: 'profile_weight',
+            ACTIVITY: 'profile_activity',
+            TIMESTAMP: 'data_timestamp'
+        };
+
+        // Получаем элементы DOM
+        const calculateBtn = document.getElementById('calculate');
+        const loadFromProfileBtn = document.getElementById('loadFromProfile');
+        const weightInput = document.getElementById('weight');
+        const activitySelect = document.getElementById('activity');
+        const climateInput = document.getElementById('climate');
+        const baseWaterSpan = document.getElementById('baseWater');
+        const activityWaterSpan = document.getElementById('activityWater');
+        const recommendedWaterSpan = document.getElementById('recommendedWater');
+        const notification = document.getElementById('notification');
+
+        // Сопоставление климата с значениями
+        const climateValues = {
+            'Умеренный': 1,
+            'Жаркий': 1.2,
+            'Холодный': 0.9
+        };
+
+        // Функция загрузки данных из профиля
+        function loadUserData() {
+            const weight = localStorage.getItem(STORAGE_KEYS.WEIGHT);
+            const activityIndex = localStorage.getItem(STORAGE_KEYS.ACTIVITY); // 1.2, 1.375, 1.55, 1.725, 1.9
+
+            // Преобразуем activityIndex в формат калькулятора воды (30, 35, 40, 45)
+            let waterActivityValue;
+            if (weight && activityIndex) {
+                const activityMap = {
+                    "1.2": "30",    // Минимальная активность → Низкий
+                    "1.375": "35",  // Легкие упражнения → Умеренный
+                    "1.55": "40",   // Умеренные нагрузки → Высокий
+                    "1.725": "45",  // Активный образ жизни → Очень высокий
+                    "1.9": "45"     // Профессиональные спортсмены → Очень высокий
+                };
+                waterActivityValue = activityMap[activityIndex]
+            }
+
+            return {
+                weight: weight,
+                activity: waterActivityValue, // Новое поле для активности в формате калькулятора
+                source: weight && activityIndex ? 'local' : 'input'
+            };
+        }
+
+        function loadFromProfile() {
+            const userData = loadUserData();
+
+            if (userData.source === 'local') {
+                if (userData.weight) weightInput.value = userData.weight;
+                if (userData.activity) {
+                    // Находим option с нужным value и выбираем его
+                    const optionToSelect = Array.from(activitySelect.options).find(
+                        option => option.value === userData.activity
+                    );
+                    if (optionToSelect) optionToSelect.selected = true;
+                }
+
+                showNotification('Данные загружены из вашего профиля', false);
+
+                if (userData.weight && userData.activity) {
+                    calculateWater();
+                }
+            } else {
+                showNotification('Данные профиля не найдены. Пожалуйста, обновите данные в профиле.', true);
+            }
+        }
+
+        // Показ уведомлений
+        function showNotification(message, isError = true) {
+            if (!notification) return;
+
+            notification.textContent = message;
+            notification.style.display = 'block';
+            notification.className = isError ? 'notification error' : 'notification success';
+
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+
+        // Сброс ошибок поля
+        function resetField(input, errorElement) {
+            if (!input || !errorElement) return;
+            input.classList.remove('input-error');
+            errorElement.style.display = 'none';
+        }
+
+        // Валидация веса
+        function validateWeight() {
+            const weight = parseInt(weightInput.value);
+            let isValid = true;
+            resetField(weightInput, document.getElementById('weightError'));
+
+            if (isNaN(weight)) {
+                document.getElementById('weightError').textContent = 'Пожалуйста, введите вес';
+                document.getElementById('weightError').style.display = 'block';
+                weightInput.classList.add('input-error');
+                isValid = false;
+            } else if (weight <= 25 || weight >= 150) {
+                document.getElementById('weightError').textContent = 'Вес должен быть от 25 до 150 кг';
+                document.getElementById('weightError').style.display = 'block';
+                weightInput.classList.add('input-error');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Валидация климата
+        function validateClimate() {
+            const climate = climateInput.value.trim();
+            let isValid = true;
+            resetField(climateInput, document.getElementById('climateError'));
+
+            if (!climate) {
+                document.getElementById('climateError').textContent = 'Пожалуйста, укажите климат';
+                document.getElementById('climateError').style.display = 'block';
+                climateInput.classList.add('input-error');
+                isValid = false;
+            } else if (!['Умеренный', 'Жаркий', 'Холодный'].includes(climate)) {
+                document.getElementById('climateError').textContent = 'Пожалуйста, выберите климат из списка';
+                document.getElementById('climateError').style.display = 'block';
+                climateInput.classList.add('input-error');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Получение числового значения климата
+        function getClimateValue(climateText) {
+            return climateValues[climateText] || 1;
+        }
+
+        // Общая валидация формы
+        function validateAll() {
+            const isWeightValid = validateWeight();
+            const isClimateValid = validateClimate();
+
+            return isWeightValid && isClimateValid;
+        }
+
+        // Расчет нормы воды
+        function calculateWater() {
+            if (!validateAll()) {
+                showNotification('Пожалуйста, исправьте ошибки в данных');
+                return;
+            }
+
+            const weight = parseFloat(weightInput.value);
+            const activity = parseFloat(activitySelect.value);
+            const climateText = climateInput.value.trim();
+            const climate = getClimateValue(climateText);
+
+            // Базовая норма (35 мл на 1 кг веса)
+            const baseWater = 35 * weight;
+
+            // Норма с учетом активности (мл на 1 кг веса)
+            const activityWater = activity * weight;
+
+            // Рекомендуемая норма с учетом климата
+            const recommendedWater = activityWater * climate;
+
+            baseWaterSpan.textContent = Math.round(baseWater) + ' мл/день';
+            activityWaterSpan.textContent = Math.round(activityWater) + ' мл/день';
+            recommendedWaterSpan.textContent = Math.round(recommendedWater) + ' мл/день (' + climateText + ')';
+        }
+
+        // Назначаем обработчики событий
+        weightInput.addEventListener('input', function () {
+            resetField(weightInput, document.getElementById('weightError'));
+        });
+
+        climateInput.addEventListener('input', function () {
+            resetField(climateInput, document.getElementById('climateError'));
+        });
+
+        weightInput.addEventListener('blur', validateWeight);
+        climateInput.addEventListener('blur', validateClimate);
+
+        if (calculateBtn) {
+            calculateBtn.addEventListener('click', calculateWater);
+        }
+
+        if (loadFromProfileBtn) {
+            loadFromProfileBtn.addEventListener('click', loadFromProfile);
+
+            setTimeout(() => {
+                showNotification('Вы можете загрузить данные из профиля', false);
+            }, 500);
+        } else {
+            setTimeout(() => {
+                showNotification('Для загрузки данных из профиля необходимо авторизоваться');
+            }, 500);
+        }
+    });
+</script>
+</body>
+
+</html>
