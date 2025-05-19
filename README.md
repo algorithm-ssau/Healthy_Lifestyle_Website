@@ -39,9 +39,9 @@
 
 ## Установка ⌨️
 
-1.
+1. Перейти по адресу  https://pardonably-revealing-houndshark.cloudpub.ru/ 
+                       
 
-2.
 
 ## Стек технологий ⚙️
 
