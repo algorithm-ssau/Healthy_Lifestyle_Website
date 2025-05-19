@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тренировки | ZОЖесть</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #2d3436;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: #000000;
+      position: fixed;
+      width: 100%;
+      padding: 15px 0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .logo {
+      margin-right: 40px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      text-decoration: none
+    }
+
+    .logo svg {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      transition:
+        fill 0.3s ease,
+        transform 0.3s ease;
+    }
+
+    .logo:hover svg {
+      fill: #E1FF00;
+      transform: scale(1.1);
+    }
+
+    .logo-text {
+      font-weight: 700;
+      color: white;
+      font-size: 18px;
+      transition:
+        color 0.3s ease,
+        text-shadow 0.3s ease;
+    }
+
+    .logo:hover .logo-text {
+      color: #E1FF00;
+      text-shadow: 0 0 5px rgba(225, 255, 0, 0.5);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      flex-grow: 1;
+      justify-content: center;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition:
+        color 0.3s ease,
+        background-color 0.3s ease,
+        transform 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: #D22283;
+      background-color: rgba(210, 34, 131, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .nav-links a:active {
+      transform: translateY(0);
+    }
+
+    .profile-icon {
+      margin-left: auto;
+    }
+
+    .profile-icon svg {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      transition:
+        fill 0.3s ease,
+        transform 0.3s ease;
+    }
+
+    .profile-icon:hover svg {
+      fill: #D22283;
+      transform: scale(1.1);
+    }
+
+    .workouts {
+      text-align: center;
+      padding: 100px 20px 40px;
+    }
+
+    .workouts h1 {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .filter-container {
+      max-width: 800px;
+      margin: 0 auto 40px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .filter-select {
+      padding: 12px 20px;
+      border-radius: 30px;
+      border: 2px solid #D22283;
+      background-color: white;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      font-size: 16px;
+      color: #2d3436;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 200px;
+    }
+
+    .filter-select:hover {
+      background-color: rgba(210, 34, 131, 0.1);
+    }
+
+    .filter-select:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(225, 255, 0, 0.5);
+    }
+
+    .workouts-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .workout-card {
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      width: 100%;
+      max-width: 350px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+
+    .workout-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .workout-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .workout-content {
+      padding: 20px;
+      text-align: left;
+    }
+
+    .workout-type {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .cardio {
+      background-color: #E1FF00;
+      color: #000;
+    }
+
+    .strength {
+      background-color: #D22283;
+      color: white;
+    }
+
+    .flexibility {
+      background-color: #00b894;
+      color: white;
+    }
+
+    .hiit {
+      background-color: #0984e3;
+      color: white;
+    }
+
+    .crossfit {
+      background-color: #e17055;
+      color: white;
+    }
+
+    .pilates {
+      background-color: #6c5ce7;
+      color: white;
+    }
+
+    .workout-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0 0 15px;
+    }
+
+    .workout-duration {
+      display: flex;
+      align-items: center;
+      color: #636e72;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .workout-duration svg {
+      width: 16px;
+      height: 16px;
+      margin-right: 5px;
+      fill: #636e72;
+    }
+
+    .workout-exercises {
+      margin-top: 20px;
+    }
+
+    .exercises-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #D22283;
+    }
+
+    .exercise-item {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .exercise-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .exercise-icon {
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+
+    .exercise-icon svg {
+      width: 16px;
+      height: 16px;
+      fill: #D22283;
+    }
+
+    .exercise-name {
+      font-weight: 500;
+    }
+
+    .exercise-sets {
+      font-size: 13px;
+      color: #636e72;
+      margin-top: 3px;
+    }
+
+    .workout-link {
+      display: inline-block;
+      background-color: #D22283;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .workout-card:hover .workout-link {
+      background-color: #E1FF00;
+      color: #000;
+    }
+
+    @media (max-width: 768px) {
+      .workouts {
+        padding: 80px 15px 30px;
+      }
+
+      .workouts h1 {
+        font-size: 32px;
+      }
+
+      .filter-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .filter-select {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="nav-container">
+    <div class="nav-content">
+      <a th:href="@{/}" class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#D22283">
+          <path
+            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+        </svg>
+        <span class="logo-text">ZОЖесть</span>
+      </a>
+
+      <nav class="nav-links">
+        <a  th:href="@{/calculators}">Калькуляторы</a>
+        <a  th:href="@{/train}">Тренировки</a>
+        <a  th:href="@{/generator}">Генератор</a>
+      </nav>
+
+      <div class="profile-icon">
+        <a class="profile-link" th:href="@{/profile}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+            <path
+                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                    transform="scale(1.5)" transform-origin="12 12" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="workouts">
+  <h1>Программы тренировок</h1>
+
+  <div class="filter-container">
+    <select class="filter-select" id="type-filter">
+      <option value="all">Все типы тренировок</option>
+      <option value="cardio">Кардио</option>
+      <option value="strength">Силовые</option>
+      <option value="flexibility">Гибкость</option>
+      <option value="hiit">HIIT</option>
+      <option value="crossfit">Кроссфит</option>
+      <option value="pilates">Пилатес</option>
+    </select>
+
+    <select class="filter-select" id="level-filter">
+      <option value="all">Все уровни</option>
+      <option value="beginner">Начинающий</option>
+      <option value="intermediate">Средний</option>
+      <option value="advanced">Продвинутый</option>
+    </select>
+  </div>
+
+  <div class="workouts-container">
+    <!-- Кардио тренировка 1 -->
+    <div class="workout-card" data-type="cardio" data-level="beginner">
+      <img th:src="@{/img/photo_1_2025-05-19_09-59-49.jpg}" alt="Кардио тренировка" class="workout-image">
+      <div class="workout-content">
+        <span class="workout-type cardio">Кардио</span>
+        <h3 class="workout-title">Бег для начинающих</h3>
+        <div class="workout-duration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <span>30 минут</span>
+        </div>
+        <p>Идеальная тренировка для тех, кто только начинает заниматься бегом. Помогает укрепить сердечно-сосудистую систему.</p>
+
+        <div class="workout-exercises">
+          <div class="exercises-title">Упражнения:</div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Бег трусцой</div>
+              <div class="exercise-sets">5 минут разминка + 20 минут основной бег + 5 минут заминка</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Ходьба в гору</div>
+              <div class="exercise-sets">3 подхода по 2 минуты</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="workout-link">Начать тренировку</a>
+      </div>
+    </div>
+
+    <!-- Силовая тренировка 1 -->
+    <div class="workout-card" data-type="strength" data-level="intermediate">
+      <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Силовая тренировка" class="workout-image">
+      <div class="workout-content">
+        <span class="workout-type strength">Силовая</span>
+        <h3 class="workout-title">Фулл-бади с гантелями</h3>
+        <div class="workout-duration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <span>45 минут</span>
+        </div>
+        <p>Комплексная тренировка на все группы мышц с использованием гантелей. Подходит для среднего уровня подготовки.</p>
+
+        <div class="workout-exercises">
+          <div class="exercises-title">Упражнения:</div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Приседания с гантелями</div>
+              <div class="exercise-sets">4 подхода по 12 повторений</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Тяга гантелей в наклоне</div>
+              <div class="exercise-sets">3 подхода по 10 повторений</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Жим гантелей стоя</div>
+              <div class="exercise-sets">3 подхода по 8 повторений</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="workout-link">Начать тренировку</a>
+      </div>
+    </div>
+
+    <!-- Тренировка на гибкость 1 -->
+    <div class="workout-card" data-type="flexibility" data-level="beginner">
+      <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Йога" class="workout-image">
+      <div class="workout-content">
+        <span class="workout-type flexibility">Гибкость</span>
+        <h3 class="workout-title">Утренняя йога</h3>
+        <div class="workout-duration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <span>25 минут</span>
+        </div>
+        <p>Комплекс простых асан для пробуждения тела, улучшения гибкости и мобильности суставов.</p>
+
+        <div class="workout-exercises">
+          <div class="exercises-title">Асаны:</div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Поза кошки-коровы</div>
+              <div class="exercise-sets">2 минуты</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Поза ребенка</div>
+              <div class="exercise-sets">1 минута</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Поза собаки мордой вниз</div>
+              <div class="exercise-sets">2 минуты</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="workout-link">Начать тренировку</a>
+      </div>
+    </div>
+
+    <!-- HIIT тренировка 1 -->
+    <div class="workout-card" data-type="hiit" data-level="advanced">
+      <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="HIIT тренировка" class="workout-image">
+      <div class="workout-content">
+        <span class="workout-type hiit">HIIT</span>
+        <h3 class="workout-title">Интенсивный интервальный тренинг</h3>
+        <div class="workout-duration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <span>20 минут</span>
+        </div>
+        <p>Короткая, но очень интенсивная тренировка для сжигания жира и улучшения выносливости. Только для продвинутых!</p>
+
+        <div class="workout-exercises">
+          <div class="exercises-title">Упражнения:</div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Берпи</div>
+              <div class="exercise-sets">8 интервалов по 30 секунд</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Прыжки на скакалке</div>
+              <div class="exercise-sets">8 интервалов по 30 секунд</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Скалолаз</div>
+              <div class="exercise-sets">8 интервалов по 30 секунд</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="workout-link">Начать тренировку</a>
+      </div>
+    </div>
+
+    <!-- Кардио тренировка 2 -->
+    <div class="workout-card" data-type="cardio" data-level="intermediate">
+      <img src="https://images.unsplash.com/photo-1434682881908-b43d0467b798?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Велоспорт" class="workout-image">
+      <div class="workout-content">
+        <span class="workout-type cardio">Кардио</span>
+        <h3 class="workout-title">Интервалы на велосипеде</h3>
+        <div class="workout-duration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <span>40 минут</span>
+        </div>
+        <p>Интервальная тренировка на велосипеде для улучшения выносливости и сжигания калорий.</p>
+
+        <div class="workout-exercises">
+          <div class="exercises-title">Упражнения:</div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Разминка</div>
+              <div class="exercise-sets">5 минут легкого темпа</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Интервалы</div>
+              <div class="exercise-sets">8 интервалов: 30 сек спринт + 1 мин отдых</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Заминка</div>
+              <div class="exercise-sets">5 минут легкого темпа</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="workout-link">Начать тренировку</a>
+      </div>
+    </div>
+
+    <!-- Силовая тренировка 2 -->
+    <div class="workout-card" data-type="strength" data-level="advanced">
+      <img src="https://images.unsplash.com/photo-1534258936925-c58bed479fcb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Силовая тренировка" class="workout-image">
+      <div class="workout-content">
+        <span class="workout-type strength">Силовая</span>
+        <h3 class="workout-title">Тяжелая атлетика</h3>
+        <div class="workout-duration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <span>60 минут</span>
+        </div>
+        <p>Интенсивная тренировка с тяжелыми весами для развития силы и мышечной массы.</p>
+
+        <div class="workout-exercises">
+          <div class="exercises-title">Упражнения:</div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Становая тяга</div>
+              <div class="exercise-sets">5 подходов по 5 повторений</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Жим штанги лежа</div>
+              <div class="exercise-sets">4 подхода по 6 повторений</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Приседания со штангой</div>
+              <div class="exercise-sets">4 подхода по 6 повторений</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="workout-link">Начать тренировку</a>
+      </div>
+    </div>
+
+    <!-- Тренировка на гибкость 2 -->
+    <div class="workout-card" data-type="flexibility" data-level="intermediate">
+      <img th:src="@{/img/photo_1_2025-05-19_09-59-49.jpg}" alt="Стретчинг" class="workout-image">
+      <div class="workout-content">
+        <span class="workout-type flexibility">Гибкость</span>
+        <h3 class="workout-title">Глубокий стретчинг</h3>
+        <div class="workout-duration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <span>35 минут</span>
+        </div>
+        <p>Комплекс упражнений для глубокой растяжки всех основных групп мышц.</p>
+
+        <div class="workout-exercises">
+          <div class="exercises-title">Упражнения:</div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Растяжка подколенных сухожилий</div>
+              <div class="exercise-sets">3 подхода по 30 секунд</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Растяжка квадрицепсов</div>
+              <div class="exercise-sets">3 подхода по 30 секунд</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Растяжка спины</div>
+              <div class="exercise-sets">3 подхода по 30 секунд</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="workout-link">Начать тренировку</a>
+      </div>
+    </div>
+
+    <!-- Кроссфит тренировка -->
+    <div class="workout-card" data-type="crossfit" data-level="advanced">
+      <img th:src="@{/img/photo_2_2025-05-19_09-59-49.jpg}" alt="Кроссфит" class="workout-image">
+      <div class="workout-content">
+        <span class="workout-type crossfit">Кроссфит</span>
+        <h3 class="workout-title">WOD "Cindy"</h3>
+        <div class="workout-duration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <span>20 минут</span>
+        </div>
+        <p>Классическая кроссфит тренировка на время. 20 минут максимального количества кругов.</p>
+
+        <div class="workout-exercises">
+          <div class="exercises-title">Упражнения (на круг):</div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Подтягивания</div>
+              <div class="exercise-sets">5 повторений</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Отжимания</div>
+              <div class="exercise-sets">10 повторений</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Приседания</div>
+              <div class="exercise-sets">15 повторений</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="workout-link">Начать тренировку</a>
+      </div>
+    </div>
+
+    <!-- Пилатес тренировка -->
+    <div class="workout-card" data-type="pilates" data-level="beginner">
+      <img th:src="@{/img/photo_3_2025-05-19_09-59-49.jpg}" alt="Пилатес" class="workout-image">
+      <div class="workout-content">
+        <span class="workout-type pilates">Пилатес</span>
+        <h3 class="workout-title">Основы пилатеса</h3>
+        <div class="workout-duration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <span>30 минут</span>
+        </div>
+        <p>Базовые упражнения пилатеса для укрепления корпуса, улучшения осанки и гибкости.</p>
+
+        <div class="workout-exercises">
+          <div class="exercises-title">Упражнения:</div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Сотня</div>
+              <div class="exercise-sets">3 подхода по 10 дыханий</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Круги ногами</div>
+              <div class="exercise-sets">3 подхода по 10 повторений</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Растяжка позвоночника</div>
+              <div class="exercise-sets">3 подхода по 8 повторений</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="workout-link">Начать тренировку</a>
+      </div>
+    </div>
+
+    <!-- Кардио тренировка 3 -->
+    <div class="workout-card" data-type="cardio" data-level="advanced">
+      <img th:src="@{/img/photo_4_2025-05-19_09-59-49.jpg}" alt="Плавание" class="workout-image">
+      <div class="workout-content">
+        <span class="workout-type cardio">Кардио</span>
+        <h3 class="workout-title">Интервалы в бассейне</h3>
+        <div class="workout-duration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <span>45 минут</span>
+        </div>
+        <p>Интенсивная тренировка в бассейне с чередованием стилей и скорости плавания.</p>
+
+        <div class="workout-exercises">
+          <div class="exercises-title">Упражнения:</div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Разминка</div>
+              <div class="exercise-sets">200 м вольным стилем</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Основная часть</div>
+              <div class="exercise-sets">10x50 м с 30 сек отдыха</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Заминка</div>
+              <div class="exercise-sets">200 м на спине</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="workout-link">Начать тренировку</a>
+      </div>
+    </div>
+
+    <!-- Силовая тренировка 3 -->
+    <div class="workout-card" data-type="strength" data-level="beginner">
+      <img th:src="@{/img/photo_5_2025-05-19_09-59-49.jpg}" alt="Силовая тренировка" class="workout-image">
+      <div class="workout-content">
+        <span class="workout-type strength">Силовая</span>
+        <h3 class="workout-title">Тренировка с весом тела</h3>
+        <div class="workout-duration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <span>30 минут</span>
+        </div>
+        <p>Базовая тренировка с использованием только веса собственного тела. Идеально для начинающих.</p>
+
+        <div class="workout-exercises">
+          <div class="exercises-title">Упражнения:</div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Приседания</div>
+              <div class="exercise-sets">3 подхода по 12 повторений</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Отжимания от пола</div>
+              <div class="exercise-sets">3 подхода по 8 повторений</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Планка</div>
+              <div class="exercise-sets">3 подхода по 30 секунд</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="workout-link">Начать тренировку</a>
+      </div>
+    </div>
+
+    <!-- HIIT тренировка 2 -->
+    <div class="workout-card" data-type="hiit" data-level="intermediate">
+      <img th:src="@{/img/photo_6_2025-05-19_09-59-49.jpg}" alt="HIIT тренировка" class="workout-image">
+      <div class="workout-content">
+        <span class="workout-type hiit">HIIT</span>
+        <h3 class="workout-title">Круговая HIIT тренировка</h3>
+        <div class="workout-duration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <span>25 минут</span>
+        </div>
+        <p>Эффективная круговая тренировка для сжигания жира и развития выносливости.</p>
+
+        <div class="workout-exercises">
+          <div class="exercises-title">Упражнения:</div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Прыжки с поднятием колен</div>
+              <div class="exercise-sets">40 секунд / 20 секунд отдых</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Приседания с выпрыгиванием</div>
+              <div class="exercise-sets">40 секунд / 20 секунд отдых</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Берпи</div>
+              <div class="exercise-sets">40 секунд / 20 секунд отдых</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="workout-link">Начать тренировку</a>
+      </div>
+    </div>
+
+    <!-- Кроссфит тренировка 2 -->
+    <div class="workout-card" data-type="crossfit" data-level="intermediate">
+      <img th:src="@{/img/photo_7_2025-05-19_09-59-49.jpg}" alt="Кроссфит" class="workout-image">
+      <div class="workout-content">
+        <span class="workout-type crossfit">Кроссфит</span>
+        <h3 class="workout-title">WOD "Fran"</h3>
+        <div class="workout-duration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <span>15 минут</span>
+        </div>
+        <p>Классическая кроссфит тренировка на время. 21-15-9 повторений.</p>
+
+        <div class="workout-exercises">
+          <div class="exercises-title">Упражнения:</div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Трастеры</div>
+              <div class="exercise-sets">21-15-9 повторений</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Подтягивания</div>
+              <div class="exercise-sets">21-15-9 повторений</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="workout-link">Начать тренировку</a>
+      </div>
+    </div>
+
+    <!-- Пилатес тренировка 2 -->
+    <div class="workout-card" data-type="pilates" data-level="intermediate">
+      <img th:src="@{/img/photo_8_2025-05-19_09-59-49.jpg}" alt="Пилатес" class="workout-image">
+      <div class="workout-content">
+        <span class="workout-type pilates">Пилатес</span>
+        <h3 class="workout-title">Пилатес с кольцом</h3>
+        <div class="workout-duration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <span>40 минут</span>
+        </div>
+        <p>Тренировка с использованием пилатес-кольца для усиления нагрузки на мышцы кора.</p>
+
+        <div class="workout-exercises">
+          <div class="exercises-title">Упражнения:</div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Сжатие кольца ногами</div>
+              <div class="exercise-sets">3 подхода по 12 повторений</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Скручивания с кольцом</div>
+              <div class="exercise-sets">3 подхода по 10 повторений</div>
+            </div>
+          </div>
+          <div class="exercise-item">
+            <div class="exercise-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="exercise-name">Боковая планка с кольцом</div>
+              <div class="exercise-sets">3 подхода по 20 секунд</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="#" class="workout-link">Начать тренировку</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Фильтрация тренировок
+  document.addEventListener('DOMContentLoaded', function() {
+    const typeFilter = document.getElementById('type-filter');
+    const levelFilter = document.getElementById('level-filter');
+    const workoutCards = document.querySelectorAll('.workout-card');
+
+    function filterWorkouts() {
+      const selectedType = typeFilter.value;
+      const selectedLevel = levelFilter.value;
+
+      workoutCards.forEach(card => {
+        const cardType = card.getAttribute('data-type');
+        const cardLevel = card.getAttribute('data-level');
+
+        const typeMatch = selectedType === 'all' || cardType === selectedType;
+        const levelMatch = selectedLevel === 'all' || cardLevel === selectedLevel;
+
+        if (typeMatch && levelMatch) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    typeFilter.addEventListener('change', filterWorkouts);
+    levelFilter.addEventListener('change', filterWorkouts);
+  });
+</script>
+</body>
+
+</html>
