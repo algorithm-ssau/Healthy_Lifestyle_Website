@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор расхода калорий при ходьбе | ZОЖесть</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding-top: 0;
+            color: #2d3436;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #000000;
+            position: fixed;
+            width: 100%;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            margin-right: 40px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logo svg {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            transition: fill 0.3s ease, transform 0.3s ease;
+        }
+
+        .logo:hover svg {
+            fill: #E1FF00;
+            transform: scale(1.1);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            color: white;
+            font-size: 18px;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .logo:hover .logo-text {
+            color: #E1FF00;
+            text-shadow: 0 0 5px rgba(225, 255, 0, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #D22283;
+            background-color: rgba(210, 34, 131, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a:active {
+            transform: translateY(0);
+        }
+
+        .profile-icon {
+            margin-left: auto;
+        }
+
+        .profile-icon svg {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            transition: fill 0.3s ease, transform 0.3s ease;
+        }
+
+        .profile-icon:hover svg {
+            fill: #D22283;
+            transform: scale(1.1);
+        }
+
+        .calculator-container {
+            max-width: 800px;
+            margin: 0 auto 30px;
+            padding: 72px 15px 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator-container h1 {
+            color: #D22283;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23636e72' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+        }
+
+        .calculator-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .input-group input,
+        .input-group select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-error {
+            border-color: #e74c3c !important;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-group input:focus,
+        .input-group select:Focus {
+            border-color: #D22283;
+            outline: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .button-group button {
+            flex: 1;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #D22283;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #b31c6b;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+            max-width: 300px;
+        }
+
+        .notification.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .notification.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: #D22283;
+        }
+
+        .info-section {
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .info-section h2 {
+            color: #D22283;
+            margin-top: 0;
+        }
+
+        .info-section ul {
+            padding-left: 20px;
+        }
+
+        .info-section li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="nav-container">
+            <div class="nav-content">
+                <a th:href="@{/}" class="logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#D22283">
+                        <path
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
+                    <span class="logo-text">ZОЖесть</span>
+                </a>
+                <nav class="nav-links">
+                    <a th:href="@{/calculators}">Калькуляторы</a>
+                    <a th:href="@{/train}">Тренировки</a>
+                    <a th:href="@{/generator}">Генератор</a>
+                </nav>
+                <div class="profile-icon">
+                    <a class="profile-link" th:href="@{/profile}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+                            <path
+                                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                                transform="scale(1.5)" transform-origin="12 12" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="calculator-container">
+        <h1>Калькулятор расхода калорий при ходьбе</h1>
+        <div class="calculator-form">
+            <div id="notification" class="notification"></div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="weight">Вес (кг):</label>
+                    <input type="number" id="weight" placeholder="Введите ваш вес">
+                    <div id="weightError" class="error-message"></div>
+                </div>
+                <div class="input-group">
+                    <label for="distance">Дистанция (км):</label>
+                    <input type="number" id="distance" placeholder="Введите дистанцию">
+                    <div id="distanceError" class="error-message"></div>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="pace">Темп ходьбы:</label>
+                    <input list="paceOptions" id="pace" name="pace" placeholder="Выберите темп" autocomplete="off">
+                    <datalist id="paceOptions">
+                        <option value="Медленный (3 км/ч)" data-value="2">
+                        <option value="Средний (5 км/ч)" data-value="3.5">
+                        <option value="Быстрый (7 км/ч)" data-value="5">
+                        <option value="Очень быстрый (9 км/ч)" data-value="7">
+                    </datalist>
+                    <div id="paceError" class="error-message"></div>
+                </div>
+                <div class="input-group">
+                    <label for="terrain">Тип местности:</label>
+                    <input list="terrainOptions" id="terrain" name="terrain" placeholder="Выберите местность"
+                        autocomplete="off">
+                    <datalist id="terrainOptions">
+                        <option value="Ровная поверхность" data-value="1">
+                        <option value="Небольшие подъемы" data-value="1.2">
+                        <option value="Горная местность" data-value="1.5">
+                        <option value="Песок или снег" data-value="1.8">
+                    </datalist>
+                    <div id="terrainError" class="error-message"></div>
+                </div>
+            </div>
+
+            <div class="button-group" th:if="${hasProfileData}">
+                <button id="calculate">Рассчитать расход калорий</button>
+                <button id="loadFromProfile">Загрузить данные из профиля</button>
+            </div>
+            <div class="button-group" th:unless="${hasProfileData}">
+                <button id="calculate">Рассчитать расход калорий</button>
+            </div>
+
+            <div id="result" class="result">
+                <div class="result-item">
+                    <span class="result-label">Расход калорий:</span>
+                    <span id="caloriesBurned" class="result-value">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">С учетом темпа:</span>
+                    <span id="paceImpact" class="result-value">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">С учетом местности:</span>
+                    <span id="terrainImpact" class="result-value">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>Как рассчитывается расход калорий?</h2>
+            <p>Расход калорий при ходьбе зависит от нескольких факторов:</p>
+            <ul>
+                <li><strong>Вес:</strong> чем больше вес, тем больше калорий сжигается</li>
+                <li><strong>Дистанция:</strong> чем больше расстояние, тем больше расход энергии</li>
+                <li><strong>Темп:</strong> быстрая ходьба сжигает больше калорий, чем медленная</li>
+                <li><strong>Местность:</strong> ходьба по пересеченной местности требует больше энергии</li>
+            </ul>
+
+            <h2>Польза ходьбы для здоровья:</h2>
+            <ul>
+                <li>Укрепляет сердечно-сосудистую систему</li>
+                <li>Помогает поддерживать здоровый вес</li>
+                <li>Улучшает настроение и снижает стресс</li>
+                <li>Укрепляет мышцы и кости</li>
+                <li>Улучшает баланс и координацию</li>
+            </ul>
+
+            <h2>Советы для эффективной ходьбы:</h2>
+            <ul>
+                <li>Начинайте с комфортной дистанции и постепенно увеличивайте</li>
+                <li>Используйте удобную обувь</li>
+                <li>Следите за осанкой во время ходьбы</li>
+                <li>Пейте воду до, во время и после ходьбы</li>
+                <li>Разминайтесь перед началом ходьбы</li>
+            </ul>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Ключи для localStorage
+            const STORAGE_KEYS = {
+                WEIGHT: 'profile_weight',
+                TIMESTAMP: 'data_timestamp'
+            };
+
+            // Получаем элементы DOM
+            const calculateBtn = document.getElementById('calculate');
+            const loadFromProfileBtn = document.getElementById('loadFromProfile');
+            const weightInput = document.getElementById('weight');
+            const distanceInput = document.getElementById('distance');
+            const paceInput = document.getElementById('pace');
+            const terrainInput = document.getElementById('terrain');
+            const caloriesBurnedSpan = document.getElementById('caloriesBurned');
+            const paceImpactSpan = document.getElementById('paceImpact');
+            const terrainImpactSpan = document.getElementById('terrainImpact');
+            const notification = document.getElementById('notification');
+
+            // Сопоставление темпа с значениями
+            const paceValues = {
+                'Медленный (3 км/ч)': 2,
+                'Средний (5 км/ч)': 3.5,
+                'Быстрый (7 км/ч)': 5,
+                'Очень быстрый (9 км/ч)': 7
+            };
+
+            // Сопоставление местности с значениями
+            const terrainValues = {
+                'Ровная поверхность': 1,
+                'Небольшие подъемы': 1.2,
+                'Горная местность': 1.5,
+                'Песок или снег': 1.8
+            };
+
+            // Функция загрузки данных из профиля
+            function loadUserData() {
+                const weight = localStorage.getItem(STORAGE_KEYS.WEIGHT);
+
+                // Проверяем наличие данных, не зависимо от времени
+                if (weight) {
+                    return {
+                        weight: weight,
+                        source: 'local'
+                    };
+                }
+
+                return {
+                    weight: null,
+                    source: 'input'
+                };
+            }
+
+            // Загрузка данных из профиля
+            function loadFromProfile() {
+                const userData = loadUserData();
+
+                if (userData.source === 'local') {
+                    if (userData.weight) weightInput.value = userData.weight;
+                    showNotification('Данные загружены из вашего профиля', false);
+
+                    if (userData.weight) {
+                        calculateCalories();
+                    }
+                } else {
+                    showNotification('Данные профиля не найдены. Пожалуйста, обновите данные в профиле.', true);
+                }
+            }
+
+            // Показ уведомлений
+            function showNotification(message, isError = true) {
+                if (!notification) return;
+
+                notification.textContent = message;
+                notification.style.display = 'block';
+                notification.className = isError ? 'notification error' : 'notification success';
+
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 5000);
+            }
+
+            // Сброс ошибок поля
+            function resetField(input, errorElement) {
+                if (!input || !errorElement) return;
+                input.classList.remove('input-error');
+                errorElement.style.display = 'none';
+            }
+
+            // Валидация веса
+            function validateWeight() {
+                const weight = parseInt(weightInput.value);
+                let isValid = true;
+                resetField(weightInput, document.getElementById('weightError'));
+
+                if (isNaN(weight)) {
+                    document.getElementById('weightError').textContent = 'Пожалуйста, введите вес';
+                    document.getElementById('weightError').style.display = 'block';
+                    weightInput.classList.add('input-error');
+                    isValid = false;
+                } else if (weight <= 25 || weight >= 150) {
+                    document.getElementById('weightError').textContent = 'Вес должен быть от 25 до 150 кг';
+                    document.getElementById('weightError').style.display = 'block';
+                    weightInput.classList.add('input-error');
+                    isValid = false;
+                }
+
+                return isValid;
+            }
+
+            // Валидация дистанции
+            function validateDistance() {
+                const distance = parseFloat(distanceInput.value);
+                let isValid = true;
+                resetField(distanceInput, document.getElementById('distanceError'));
+
+                if (isNaN(distance)) {
+                    document.getElementById('distanceError').textContent = 'Пожалуйста, введите дистанцию';
+                    document.getElementById('distanceError').style.display = 'block';
+                    distanceInput.classList.add('input-error');
+                    isValid = false;
+                } else if (distance <= 0 || distance > 100) {
+                    document.getElementById('distanceError').textContent = 'Дистанция должна быть от 0.1 до 100 км';
+                    document.getElementById('distanceError').style.display = 'block';
+                    distanceInput.classList.add('input-error');
+                    isValid = false;
+                }
+
+                return isValid;
+            }
+
+            // Валидация темпа
+            function validatePace() {
+                const pace = paceInput.value.trim();
+                let isValid = true;
+                resetField(paceInput, document.getElementById('paceError'));
+
+                if (!pace) {
+                    document.getElementById('paceError').textContent = 'Пожалуйста, укажите темп ходьбы';
+                    document.getElementById('paceError').style.display = 'block';
+                    paceInput.classList.add('input-error');
+                    isValid = false;
+                } else if (!['Медленный (3 км/ч)', 'Средний (5 км/ч)', 'Быстрый (7 км/ч)', 'Очень быстрый (9 км/ч)'].includes(pace)) {
+                    document.getElementById('paceError').textContent = 'Пожалуйста, выберите темп из списка';
+                    document.getElementById('paceError').style.display = 'block';
+                    paceInput.classList.add('input-error');
+                    isValid = false;
+                }
+
+                return isValid;
+            }
+
+            // Валидация местности
+            function validateTerrain() {
+                const terrain = terrainInput.value.trim();
+                let isValid = true;
+                resetField(terrainInput, document.getElementById('terrainError'));
+
+                if (!terrain) {
+                    document.getElementById('terrainError').textContent = 'Пожалуйста, укажите тип местности';
+                    document.getElementById('terrainError').style.display = 'block';
+                    terrainInput.classList.add('input-error');
+                    isValid = false;
+                } else if (!['Ровная поверхность', 'Небольшие подъемы', 'Горная местность', 'Песок или снег'].includes(terrain)) {
+                    document.getElementById('terrainError').textContent = 'Пожалуйста, выберите местность из списка';
+                    document.getElementById('terrainError').style.display = 'block';
+                    terrainInput.classList.add('input-error');
+                    isValid = false;
+                }
+
+                return isValid;
+            }
+
+            // Получение числового значения темпа
+            function getPaceValue(paceText) {
+                return paceValues[paceText] || 3.5;
+            }
+
+            // Получение числового значения местности
+            function getTerrainValue(terrainText) {
+                return terrainValues[terrainText] || 1;
+            }
+
+            // Общая валидация формы
+            function validateAll() {
+                const isWeightValid = validateWeight();
+                const isDistanceValid = validateDistance();
+                const isPaceValid = validatePace();
+                const isTerrainValid = validateTerrain();
+
+                return isWeightValid && isDistanceValid && isPaceValid && isTerrainValid;
+            }
+
+            // Расчет расхода калорий
+            function calculateCalories() {
+                if (!validateAll()) {
+                    showNotification('Пожалуйста, исправьте ошибки в данных');
+                    return;
+                }
+
+                const weight = parseFloat(weightInput.value);
+                const distance = parseFloat(distanceInput.value);
+                const paceText = paceInput.value.trim();
+                const pace = getPaceValue(paceText);
+                const terrainText = terrainInput.value.trim();
+                const terrain = getTerrainValue(terrainText);
+
+                // Базовая формула: калории = вес * дистанция * коэффициент
+                const baseCalories = weight * distance * 0.7;
+                const paceCalories = baseCalories * (pace / 3.5);
+                const terrainCalories = paceCalories * terrain;
+
+                caloriesBurnedSpan.textContent = Math.round(baseCalories) + ' ккал';
+                paceImpactSpan.textContent = Math.round(paceCalories) + ' ккал (' + paceText + ')';
+                terrainImpactSpan.textContent = Math.round(terrainCalories) + ' ккал (' + terrainText + ')';
+            }
+
+            // Назначаем обработчики событий
+            weightInput.addEventListener('input', function () {
+                resetField(weightInput, document.getElementById('weightError'));
+            });
+
+            distanceInput.addEventListener('input', function () {
+                resetField(distanceInput, document.getElementById('distanceError'));
+            });
+
+            paceInput.addEventListener('input', function () {
+                resetField(paceInput, document.getElementById('paceError'));
+            });
+
+            terrainInput.addEventListener('input', function () {
+                resetField(terrainInput, document.getElementById('terrainError'));
+            });
+
+            weightInput.addEventListener('blur', validateWeight);
+            distanceInput.addEventListener('blur', validateDistance);
+            paceInput.addEventListener('blur', validatePace);
+            terrainInput.addEventListener('blur', validateTerrain);
+
+            if (calculateBtn) {
+                calculateBtn.addEventListener('click', calculateCalories);
+            }
+
+            if (loadFromProfileBtn) {
+                loadFromProfileBtn.addEventListener('click', loadFromProfile);
+
+                setTimeout(() => {
+                    showNotification('Вы можете загрузить данные из профиля', false);
+                }, 500);
+            } else {
+                setTimeout(() => {
+                    showNotification('Для загрузки данных из профиля необходимо авторизоваться');
+                }, 500);
+            }
+        });
+    </script>
+</body>
+
+</html>
