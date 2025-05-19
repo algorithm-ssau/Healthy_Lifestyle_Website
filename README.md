@@ -56,7 +56,7 @@
 
 |   Разработчик      |  Псевдоним           |   Роль            |
 | ------------------ | -------------------- | ----------------- |
-| Фриз Максим        | lanader123           | fullstack         |
+| Фриз Максим        | lanader123           | backend           |
 | Куприянов Роман    | romankupriianov      | frontend + designer|
-| Тамбовцев Александр| CaesarZero7          | frontend + teamlead |
-| Козлов Анатолий    | Ronaldovich163RUS    | design + backend  |
+| Тамбовцев Александр| CaesarZero7          | fullstack          |
+| Козлов Анатолий    | Ronaldovich163RUS    | backend           |
