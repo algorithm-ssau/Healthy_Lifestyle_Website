@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор ИМТ | ZОЖесть</title>
+    <link rel="stylesheet" href="../static/css/calculators.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding-top: 0;
+            color: #2d3436;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #000000;
+            position: fixed;
+            width: 100%;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            margin-right: 40px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo svg {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            transition: fill 0.3s ease, transform 0.3s ease;
+        }
+
+        .logo:hover svg {
+            fill: #E1FF00;
+            transform: scale(1.1);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            color: white;
+            font-size: 18px;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .logo:hover .logo-text {
+            color: #E1FF00;
+            text-shadow: 0 0 5px rgba(225, 255, 0, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #D22283;
+            background-color: rgba(210, 34, 131, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a:active {
+            transform: translateY(0);
+        }
+
+        .profile-icon {
+            margin-left: auto;
+        }
+
+        .profile-icon svg {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            transition: fill 0.3s ease, transform 0.3s ease;
+        }
+
+        .profile-icon:hover svg {
+            fill: #D22283;
+            transform: scale(1.1);
+        }
+
+        .calculator-container {
+            max-width: 800px;
+            margin: 0px auto 30px;
+            padding: 72px 15px 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator-container h1 {
+            color: #D22283;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .calculator-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .input-group input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-error {
+            border-color: #e74c3c !important;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-group input:focus {
+            border-color: #D22283;
+            outline: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .button-group button {
+            flex: 1;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        button {
+            padding: 12px 15px;
+            background-color: #D22283;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #b31c6b;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .btn-save {
+            background-color: #2ecc71;
+            width: 100%;
+        }
+
+        .btn-save:hover {
+            background-color: #27ae60;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+            max-width: 300px;
+        }
+
+        .notification.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .notification.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+        }
+
+        .result-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 200px;
+        }
+
+        .underweight {
+            color: #3498db;
+        }
+
+        .normal {
+            color: #2ecc71;
+        }
+
+        .overweight {
+            color: #f39c12;
+        }
+
+        .obese {
+            color: #e74c3c;
+        }
+
+        .info-section {
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .info-section h2 {
+            color: #D22283;
+            margin-top: 0;
+        }
+
+        .info-section ul {
+            padding-left: 20px;
+        }
+
+        .info-section li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="nav-container">
+        <div class="nav-content">
+            <a th:href="@{/}" class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#D22283">
+                    <path
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+                <span class="logo-text">ZОЖесть</span>
+            </a>
+            <nav class="nav-links">
+                <a th:href="@{/calculators}">Калькуляторы</a>
+                <a th:href="@{/train}">Тренировки</a>
+                <a th:href="@{/generator}">Генератор</a>
+            </nav>
+            <div class="profile-icon">
+                <a class="profile-link" th:href="@{/profile}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+                        <path
+                                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                                transform="scale(1.5)" transform-origin="12 12" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="calculator-container">
+    <h1>Калькулятор индекса массы тела (ИМТ)</h1>
+
+    <div id="serverNotification" class="notification" th:if="${success}" th:text="${success}"></div>
+    <div id="serverErrorNotification" class="notification" th:if="${error}" th:text="${error}"></div>
+
+    <form id="bmiForm" th:action="@{/bmi-calculator/save}" method="post" th:object="${bmiData}" class="calculator-form">
+
+
+        <div class="input-row">
+            <div class="input-group" th:classappend="${#fields.hasErrors('height')} ? 'has-error'">
+                <label for="height">Рост (см):</label>
+                <input type="number" id="height" name="height" th:field="*{height}"
+                       th:classappend="${#fields.hasErrors('height')} ? 'input-error'"
+                       placeholder="Введите ваш рост" onblur="validateHeight()"/>
+                <div th:if="${#fields.hasErrors('height')}" th:errors="*{height}"
+                     class="error-message"></div>
+                <div id="heightError" class="error-message"></div>
+            </div>
+
+            <div class="input-group" th:classappend="${#fields.hasErrors('weight')} ? 'has-error'">
+                <label for="weight">Вес (кг):</label>
+                <input type="number" id="weight" name="weight" th:field="*{weight}"
+                       th:classappend="${#fields.hasErrors('weight')} ? 'input-error'"
+                       placeholder="Введите ваш вес" onblur="validateWeight()"/>
+                <div th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}"
+                     class="error-message"></div>
+                <div id="weightError" class="error-message"></div>
+            </div>
+        </div>
+
+        <div class="button-group"  th:if="${hasProfileData}">
+            <button type="button" id="calculate">Рассчитать ИМТ</button>
+            <button type="button" id="loadFromProfile">Загрузить данные из профиля</button>
+        </div>
+        <div class="button-group" th:unless="${hasProfileData}">
+            <button type="button" id="calculate">Рассчитать ИМТ</button>
+        </div>
+
+        <div id="result" class="result">
+            <div class="result-item">
+                <span class="result-label">Ваш ИМТ:</span>
+                <span id="bmiValue">-</span>
+                <input type="hidden" id="bmi" name="bmi" th:field="*{bmi}"/>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Интерпретация:</span>
+                <span id="interpretation">-</span>
+                <input type="hidden" id="interpretationValue" name="interpretation" th:field="*{interpretation}"/>
+            </div>
+        </div>
+        <button type="submit" class="btn-save" th:if="${hasProfileData}">Сохранить данные в профиль</button>
+
+    </form>
+
+    <div class="info-section">
+        <h2>Что такое ИМТ?</h2>
+        <p>Индекс массы тела (ИМТ) — это величина, позволяющая оценить степень соответствия массы человека и его
+            роста.</p>
+
+        <h2>Интерпретация результатов:</h2>
+        <ul>
+            <li class="underweight"><strong>Менее 18.5</strong> - Недостаточный вес</li>
+            <li class="normal"><strong>18.5 - 24.9</strong> - Нормальный вес</li>
+            <li class="overweight"><strong>25 - 29.9</strong> - Избыточный вес</li>
+            <li class="obese"><strong>30 и более</strong> - Ожирение</li>
+        </ul>
+    </div>
+</main>
+
+<div id="validationNotification" class="notification">
+    Введенные данные некорректны! Убедитесь в их правильности!
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const STORAGE_KEYS = {
+            HEIGHT: 'profile_height',
+            WEIGHT: 'profile_weight',
+            TIMESTAMP: 'data_timestamp'
+        };
+
+        // Элементы DOM
+        const calculateBtn = document.getElementById('calculate');
+        const loadFromProfileBtn = document.getElementById('loadFromProfile');
+        const heightInput = document.getElementById('height');
+        const weightInput = document.getElementById('weight');
+        const bmiValueSpan = document.getElementById('bmiValue');
+        const interpretationSpan = document.getElementById('interpretation');
+        const bmiForm = document.getElementById('bmiForm');
+        const validationNotification = document.getElementById('validationNotification');
+        const serverNotification = document.getElementById('serverNotification');
+        const serverErrorNotification = document.getElementById('serverErrorNotification');
+
+        function loadUserData() {
+                const height = localStorage.getItem(STORAGE_KEYS.HEIGHT);
+                const weight = localStorage.getItem(STORAGE_KEYS.WEIGHT);
+
+                // Проверяем наличие данных, не зависимо от времени
+                if (height && weight) {
+                    return {
+                        height: height,
+                        weight: weight,
+                        source: 'local'
+                    };
+                }
+
+                return {
+                    height: null,
+                    weight: null,
+                    source: 'input'
+                };
+        }
+
+        // Показываем серверные уведомления
+        if (serverNotification) {
+            serverNotification.classList.add('success');
+            serverNotification.style.display = 'block';
+            setTimeout(() => {
+                serverNotification.style.display = 'none';
+            }, 5000);
+        }
+
+        if (serverErrorNotification) {
+            serverErrorNotification.style.display = 'block';
+            setTimeout(() => {
+                serverErrorNotification.style.display = 'none';
+            }, 5000);
+        }
+
+        // Функции валидации
+        function validateHeight() {
+            const height = parseInt(heightInput.value);
+            const heightGroup = heightInput.closest('.input-group');
+            const heightError = heightGroup.querySelector('#heightError');
+            let isValid = true;
+
+            heightInput.classList.remove('input-error');
+            heightError.style.display = 'none';
+
+            if (isNaN(height)) {
+                heightInput.classList.add('input-error');
+                heightError.textContent = 'Пожалуйста, введите рост';
+                heightError.style.display = 'block';
+                isValid = false;
+            } else if (height <= 65 || height >= 272) {
+                heightInput.classList.add('input-error');
+                heightError.textContent = 'Рост должен быть от 65 до 272 см';
+                heightError.style.display = 'block';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function validateWeight() {
+            const weight = parseInt(weightInput.value);
+            const weightGroup = weightInput.closest('.input-group');
+            const weightError = weightGroup.querySelector('#weightError');
+            let isValid = true;
+
+            weightInput.classList.remove('input-error');
+            weightError.style.display = 'none';
+
+            if (isNaN(weight)) {
+                weightInput.classList.add('input-error');
+                weightError.textContent = 'Пожалуйста, введите вес';
+                weightError.style.display = 'block';
+                isValid = false;
+            } else if (weight <= 25 || weight >= 150) {
+                weightInput.classList.add('input-error');
+                weightError.textContent = 'Вес должен быть от 25 до 150 кг';
+                weightError.style.display = 'block';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function validateAll() {
+            const isHeightValid = validateHeight();
+            const isWeightValid = validateWeight();
+            return isHeightValid && isWeightValid;
+        }
+
+        // Расчет ИМТ
+        function calculateBMI() {
+            if (!validateAll()) {
+                showNotification('Исправьте ошибки перед расчетом');
+                return null;
+            }
+
+            const height = parseFloat(heightInput.value);
+            const weight = parseFloat(weightInput.value);
+            const heightInMeters = height / 100;
+            const bmi = weight / (heightInMeters * heightInMeters);
+            const roundedBMI = bmi.toFixed(1);
+
+            let interpretation = '';
+            let interpretationClass = '';
+
+            if (bmi < 18.5) {
+                interpretation = 'Недостаточный вес. Рекомендуется проконсультироваться с врачом.';
+                interpretationClass = 'underweight';
+            } else if (bmi >= 18.5 && bmi < 25) {
+                interpretation = 'Нормальный вес. Продолжайте поддерживать здоровый образ жизни!';
+                interpretationClass = 'normal';
+            } else if (bmi >= 25 && bmi < 30) {
+                interpretation = 'Избыточный вес. Рекомендуется увеличить физическую активность и пересмотреть питание.';
+                interpretationClass = 'overweight';
+            } else {
+                interpretation = 'Ожирение. Настоятельно рекомендуется проконсультироваться с врачом и диетологом.';
+                interpretationClass = 'obese';
+            }
+
+            bmiValueSpan.textContent = roundedBMI;
+            bmiValueSpan.className = interpretationClass;
+            document.getElementById('bmi').value = roundedBMI;
+
+            interpretationSpan.textContent = interpretation;
+            interpretationSpan.className = interpretationClass;
+            document.getElementById('interpretationValue').value = interpretation;
+
+            return { bmi: roundedBMI, interpretation: interpretation };
+        }
+
+
+         // Загрузка данных из профиля (из localStorage)
+            function loadFromProfile() {
+                const userData = loadUserData();
+
+                if (userData.source === 'local') {
+                    if (userData.height) heightInput.value = userData.height;
+                    if (userData.weight) weightInput.value = userData.weight;
+                    showNotification('Данные загружены из вашего профиля', false);
+
+                    if (userData.height && userData.weight) {
+                        calculateBMI();
+                    }
+                } else {
+                    showNotification('Данные профиля не найдены. Пожалуйста, обновите данные в профиле.', true);
+                }
+            }
+
+        // Показ уведомлений
+        function showNotification(message, isError = true) {
+            validationNotification.textContent = message;
+            validationNotification.className = `notification ${isError ? '' : 'success'}`;
+            validationNotification.style.display = 'block';
+
+            setTimeout(() => {
+                validationNotification.style.display = 'none';
+            }, 5000);
+        }
+
+        // Обработчики событий
+        heightInput.addEventListener('input', function() {
+            resetField(heightInput, document.getElementById('heightError'));
+        });
+        weightInput.addEventListener('input', function() {
+            resetField(weightInput, document.getElementById('weightError'));
+        });
+
+        function resetField(input, errorElement) {
+            input.classList.remove('input-error');
+            errorElement.style.display = 'none';
+        }
+
+        if (calculateBtn) {
+            calculateBtn.addEventListener('click', calculateBMI);
+        }
+
+        if (loadFromProfileBtn) {
+            loadFromProfileBtn.addEventListener('click', loadFromProfile);
+        }
+
+        bmiForm.addEventListener('submit', function(e) {
+            if (!validateAll()) {
+                e.preventDefault();
+                showNotification('Исправьте ошибки перед сохранением');
+            }
+        });
+
+        // Инициализация
+        setTimeout(() => {
+            if (loadFromProfileBtn) {
+                showNotification('Вы можете загрузить данные из профиля', false);
+            }
+        }, 1000);
+    });
+</script>
+</body>
+</html>
