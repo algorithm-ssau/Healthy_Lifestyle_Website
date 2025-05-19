@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Путь к здоровью</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #2d3436;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #000000;
+            position: fixed;
+            width: 100%;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            margin-right: 40px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            text-decoration: none
+        }
+
+        .logo svg {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            transition:
+                fill 0.3s ease,
+                transform 0.3s ease;
+        }
+
+        .logo:hover svg {
+            fill: #E1FF00;
+            transform: scale(1.1);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            color: white;
+            font-size: 18px;
+            transition:
+                color 0.3s ease,
+                text-shadow 0.3s ease;
+        }
+
+        .logo:hover .logo-text {
+            color: #E1FF00;
+            text-shadow: 0 0 5px rgba(225, 255, 0, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition:
+                color 0.3s ease,
+                background-color 0.3s ease,
+                transform 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #D22283;
+            background-color: rgba(210, 34, 131, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a:active {
+            transform: translateY(0);
+        }
+
+        .profile-icon {
+            margin-left: auto;
+        }
+
+        .profile-icon svg {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            transition:
+                fill 0.3s ease,
+                transform 0.3s ease;
+        }
+
+        .profile-icon:hover svg {
+            fill: #D22283;
+            transform: scale(1.1);
+        }
+
+        .dropdown {
+            transition:
+                opacity 0.3s ease,
+                visibility 0.3s ease,
+                transform 0.3s ease;
+        }
+
+        .calculators {
+            text-align: center;
+            padding: 72px 20px 0px;
+        }
+
+        .calculators h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .calculators-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .calculator-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            border-radius: 10px;
+            overflow: hidden;
+            width: 300px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+            transition: transform 0.3s;
+            color: #2d3436;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .calculator-card:focus {
+            outline: 2px solid #E1FF00;
+        }
+
+        .calculator-image {
+            width: 300px;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .calculator-content {
+            padding: 20px;
+        }
+
+        .calculator-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 0;
+        }
+
+        .calculator-link {
+            display: inline-block;
+            background-color: #D22283;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            font-size: 14px;
+            transition: background-color 0.3s ease 0.1s;
+        }
+
+        .calculator-card:hover .calculator-link {
+            background-color: #E1FF00;
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="nav-container">
+            <div class="nav-content">
+                <a th:href="@{/}" class="logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#D22283">
+                        <path
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
+                    <span class="logo-text">ZОЖесть</span>
+                </a>
+
+                <nav class="nav-links">
+                    <a  th:href="@{/calculators}">Калькуляторы</a>
+                    <a  th:href="@{/train}">Тренировки</a>
+                    <a  th:href="@{/generator}">Генератор</a>
+                </nav>
+
+                <div class="profile-icon">
+                    <a class="profile-link" th:href="@{/profile}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+                            <path
+                                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                                    transform="scale(1.5)" transform-origin="12 12" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="calculators">
+        <h1>Калькуляторы здоровья</h1>
+        <div class="calculators-container">
+            <!-- Калькулятор 1 -->
+            <a href="/bmi-calculator" class="calculator-card"
+                aria-label="Перейти к калькулятору индекса массы тела">
+                <img src="img/card-photo1.png" alt="ИМТ" class="calculator-image">
+                <div class="calculator-content">
+                    <h3 class="calculator-title">Калькулятор индекса массы тела</h3>
+                    <span class="calculator-link">Подробнее</span>
+                </div>
+            </a>
+
+            <!-- Калькулятор 2 -->
+            <a href="/calorie-calculator" class="calculator-card" aria-label="Перейти к калькулятору нормы калорий">
+                <img src="img/card-photo2.png" alt="Калории" class="calculator-image">
+                <div class="calculator-content">
+                    <h3 class="calculator-title">Калькулятор нормы калорий</h3>
+                    <span class="calculator-link">Подробнее</span>
+                </div>
+            </a>
+
+            <!-- Калькулятор 3 -->
+            <a href="/water-calculator" class="calculator-card" aria-label="Перейти к калькулятору нормы воды">
+                <img src="img/card-photo3.png" alt="Вода" class="calculator-image">
+                <div class="calculator-content">
+                    <h3 class="calculator-title">Калькулятор нормы воды</h3>
+                    <span class="calculator-link">Подробнее</span>
+                </div>
+            </a>
+
+            <!-- Калькулятор 4 -->
+            <a href="sleep-calculator" class="calculator-card" aria-label="Перейти к калькулятору нормы часов сна">
+                <img src="img/card-photo4.png" alt="Сон" class="calculator-image">
+                <div class="calculator-content">
+                    <h3 class="calculator-title">Калькулятор нормы часов сна</h3>
+                    <span class="calculator-link">Подробнее</span>
+                </div>
+            </a>
+
+            <!-- Калькулятор 5 -->
+            <a href="/walking-calculator" class="calculator-card"
+                aria-label="Перейти к калькулятору расхода калорий при ходьбе">
+                <img src="img/card-photo5.png" alt="Ходьба" class="calculator-image">
+                <div class="calculator-content">
+                    <h3 class="calculator-title">Калькулятор расхода калорий при ходьбе</h3>
+                    <span class="calculator-link">Подробнее</span>
+                </div>
+            </a>
+        </div>
+    </section>
+</body>
+
+</html>
